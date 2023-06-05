@@ -105,3 +105,17 @@ function infiniteAdd (x){
 const infinteCurrying = infiniteAdd(2)(3)(4)
 console.log(infinteCurrying)
 console.log(infinteCurrying.result())
+
+
+
+//infinte currying recursion
+function infiniteCurryingRecur(x){
+    return function (y) {
+        if(!y){
+            return x
+        }
+        return infiniteCurryingRecur(x + y)
+    }
+}
+
+console.log("through recursion infinte currying", infiniteCurryingRecur(2)(3)(4)(5)())
