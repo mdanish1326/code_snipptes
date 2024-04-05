@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Function to create an Axios instance
-const createAxiosInstance = (endpoint, version) => {
+const createAxiosInstance = (endpoint, version, private = true, extraHeaders = {}) => {
   const axiosInstance = axios.create({
     baseURL: `${endpoint}/${version}`, // Example: 'https://api.example.com/v1'
   });
@@ -9,11 +9,15 @@ const createAxiosInstance = (endpoint, version) => {
   // Request interceptor to add the auth token before each request
   axiosInstance.interceptors.request.use(
     async (config) => {
-      let token = localStorage.getItem('access_token');
-
-      if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
+      if(private) {
+        let token = localStorage.getItem('access_token');
+        if (token) {
+          config.headers['Authorization'] = `Bearer ${token}`;
+        }
       }
+
+      // Add any extra headers provided, if any
+      config.headers = { ...config.headers, ...extraHeaders };
 
       return config;
     },
